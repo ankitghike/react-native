@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -255,9 +256,17 @@ public class ReactModalHostView extends ViewGroup implements LifecycleEventListe
     if (mHardwareAccelerated) {
       mDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
     }
-    if (currentActivity == null || !currentActivity.isFinishing()) {
-      mDialog.show();
+    if (currentActivity == null || currentActivity.isFinishing()) {
+      Log.e(TAG, "showOrUpdate: current activity is not running, it is either null or finishing.");
+      return;
     }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+      if (currentActivity.isDestroyed()) {
+        Log.e(TAG, "showOrUpdate: current activity is not running.");
+        return;
+      }
+    }
+    mDialog.show();
   }
 
   /**
