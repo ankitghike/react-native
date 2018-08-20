@@ -296,7 +296,7 @@ public class CameraRollManager extends ReactContextBaseJavaModule {
       // an SQLite DB and forwards parameters to it without doing any parsing / validation.
       try {
         Uri assetURI =
-            mAssetType != null && mAssetType.equals("Videos") ? Video.Media.EXTERNAL_CONTENT_URI :
+            mAssetType != null && (mAssetType.equals("All") || mAssetType.equals("Videos")) ? Video.Media.EXTERNAL_CONTENT_URI :
                 Images.Media.EXTERNAL_CONTENT_URI;
 
         Cursor photos = resolver.query(
